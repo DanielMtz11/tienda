@@ -58,44 +58,39 @@ body.prepend( title );
 
 const seccion = document.getElementById("products-section");
 const lista = document.getElementById("lista");
+
 // console.log(lista);
 
-const contenedor = document.createElement("div");
-contenedor.classList.add("contenedor");
+// // const contenedor = document.createElement("div");
+// // contenedor.classList.add("contenedor");
 
 
-const div_cantidad = document.createElement("div");
-div_cantidad.id= "div_cantidad";
-contenedor.appendChild(div_cantidad);
-const cantidad = document.createElement("p");
-cantidad.textContent = "cantidad";
-div_cantidad.appendChild(cantidad);
+// // const div_cantidad = document.createElement("div");
+// // div_cantidad.id= "div_cantidad";
+// // contenedor.appendChild(div_cantidad);
+// // const cantidad = document.createElement("p");
+// // cantidad.textContent = "cantidad";
+// // div_cantidad.appendChild(cantidad);
 
 
-const div_productos = document.createElement("div");
-div_productos.id= "div_productos";
-contenedor.appendChild(div_productos);
-const producto = document.createElement("p");
-producto.textContent = "producto";
-div_productos.appendChild(producto);
-
-
-
-const div_precio = document.createElement("div");
-div_precio.id= "div_precio";
-contenedor.appendChild(div_precio);
-const precio = document.createElement("p");
-precio.textContent = "precio";
-div_precio.appendChild(precio);
-
-
-lista.appendChild(contenedor);
+// // const div_productos = document.createElement("div");
+// // div_productos.id= "div_productos";
+// // contenedor.appendChild(div_productos);
+// // const producto = document.createElement("p");
+// // producto.textContent = "producto";
+// // div_productos.appendChild(producto);
 
 
 
+// // const div_precio = document.createElement("div");
+// // div_precio.id= "div_precio";
+// // contenedor.appendChild(div_precio);
+// // const precio = document.createElement("p");
+// // precio.textContent = "precio";
+// // div_precio.appendChild(precio);
 
 
-
+// // lista.appendChild(contenedor);
 
 
 //Crear un fragmento para hacer una sola renderizacion
@@ -116,13 +111,13 @@ productos.forEach(actualElement =>{
     fragment.appendChild(div);
 
     const div_wrapper = document.createElement("div");
-    div.appendChild(div_wrapper);
     div_wrapper.classList.add("img-wrapper");
     //creamos una imagen y luego añadimos su propiedad source
     const img = document.createElement("img");
     div_wrapper.appendChild(img);
     img.src = actualElement.imagenPrincipal;
     // img.classList.add("principal-img");
+    div.appendChild(div_wrapper);
 
     const nombre = document.createElement("h1");
     nombre.textContent = actualElement.nombre;
@@ -137,7 +132,7 @@ productos.forEach(actualElement =>{
     div.appendChild(btn);
 
 
-    // console.log(fragment);
+    //!Aqui se ejecuta el callback
     callback(fragment);
 
 });
@@ -158,7 +153,7 @@ seccion.addEventListener("click",(evento)=>{
     if(evento.target.matches("button")){
         // console.log("es un boton");
 
-        //
+        //trae a todos los elementos relacionados al evento, en este caso nos interesa saber unicamente su nombre y precio
         let elemento=evento.target.parentElement;
 
         const h1 = elemento.querySelector("h1");
@@ -177,31 +172,39 @@ seccion.addEventListener("click",(evento)=>{
         carrito.push(producto) ;
 
         // console.log(`el carrito tiene los siguientes objetos:`);
-        // console.log(carrito);
+        console.log(carrito);
 
 
         let objetosDelCarrito ={};
 
-
+        const ul = document.createElement("ul");
         carrito.forEach(objeto=>{
         // console.log(objeto.nombre);
-
+            //* almacenamos el nombre del objeto que esta iterando 
             let nameObject= objeto.nombre;
             // let precioObject = objeto.precio;
+
+            //?Si dentro del objeto existe la propiedad nameObject le sumamos 1 a su cantidad
             if(objetosDelCarrito[nameObject]){
-                objetosDelCarrito[nameObject] +=1;
-            }
+            objetosDelCarrito[nameObject] +=1;
 
-            else{
-                objetosDelCarrito[nameObject] =1;
-            }
+            ///aqui deberia preguntar si ya existe un ul con el textconcent igual. para solo actualizar
+            //*mas bien, si el nameObject ya fue agregado
+            ul.textContent=` ${nameObject}...... ${ objetosDelCarrito[nameObject]}`;
 
-        })
-
-            console.log(objetosDelCarrito);
-
+        }    
         
+        
+        //?Si no añadimos 1 al valor, ya que sera la primera vez que se agrega.
+        else{
+            objetosDelCarrito[nameObject] =1;
+            // nombreRepetido = nameObject;
+            ul.classList.add("repetido");
+            ul.textContent=` ${nameObject}...... ${ objetosDelCarrito[nameObject]}`;
 
+        }
+    })
+        lista.appendChild(ul);
     }
 
 })
