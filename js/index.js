@@ -38,7 +38,7 @@ const productos = [
 }
 ];
 
-let carrito =[];
+let carrito =[]; //*Aqui se almacenaran los productos agregados al carrito
 
 
 //1.- Primero localizamos el body para poder insertar elementos html dentro de el
@@ -95,12 +95,7 @@ const lista = document.getElementById("lista");
 
 //Crear un fragmento para hacer una sola renderizacion
 //new crea instancias, se utiliza cada vez que se quiere crear algo nuevo de un constructor
-
-
-
 let fragment  = new DocumentFragment();//?es un nodo, un objeto minimo en el html, NO CORRESPONDE A NINGUNA ETIQUETA
-
-
 
 
 productos.forEach(actualElement =>{
@@ -140,18 +135,14 @@ productos.forEach(actualElement =>{
 
 function callback(f){
     seccion.appendChild(f)
-    // console.log("HECHO ;)")
 };
 
 
 
 
 seccion.addEventListener("click",(evento)=>{
-
-
     //matches es un metodo que permite identificar si un elemento es de una etiqueta en especifico.
     if(evento.target.matches("button")){
-        // console.log("es un boton");
 
         //trae a todos los elementos relacionados al evento, en este caso nos interesa saber unicamente su nombre y precio
         let elemento=evento.target.parentElement;
@@ -159,10 +150,10 @@ seccion.addEventListener("click",(evento)=>{
         const h1 = elemento.querySelector("h1");
 
         const precio = elemento.querySelector("p");
-        // console.log(h1.textContent);
-        // console.log(precio.textContent);
 
 
+
+        //almacecnamos el nombre y precio de cada producto
         let producto = {
             nombre: h1.textContent,
             precio: precio.textContent
@@ -171,42 +162,53 @@ seccion.addEventListener("click",(evento)=>{
 
         carrito.push(producto) ;
 
-        // console.log(`el carrito tiene los siguientes objetos:`);
-        console.log(carrito);
 
-
+        //para almacenar la cantidad de elementos
         let objetosDelCarrito ={};
 
-        const ul = document.createElement("ul");
+
+        const li= document.getElementsByTagName("li")[0];
+        ul = document.createElement("ul");
+
         carrito.forEach(objeto=>{
         // console.log(objeto.nombre);
             //* almacenamos el nombre del objeto que esta iterando 
             let nameObject= objeto.nombre;
             // let precioObject = objeto.precio;
 
-            //?Si dentro del objeto existe la propiedad nameObject le sumamos 1 a su cantidad
-            if(objetosDelCarrito[nameObject]){
-            objetosDelCarrito[nameObject] +=1;
+            
+            //?Si dentro del objeto no existe nameObject lo agregamos
+            if(objetosDelCarrito[nameObject]==null){
+                // ul = document.createElement("ul");
 
-            ///aqui deberia preguntar si ya existe un ul con el textconcent igual. para solo actualizar
-            //*mas bien, si el nameObject ya fue agregado
-            ul.textContent=` ${nameObject}...... ${ objetosDelCarrito[nameObject]}`;
 
-        }    
+                objetosDelCarrito[nameObject] =1;
+
+                ul.textContent=` ${nameObject} :  ${ objetosDelCarrito[nameObject]}`;    
+            
+            }    
+            
+            
+            //?Si ya esta agregado aumentamos su valor en uno
+            else{
+                
+                objetosDelCarrito[nameObject]++;
+                ul.textContent=` ${nameObject} :  ${ objetosDelCarrito[nameObject]}`;
+            };
         
-        
-        //?Si no añadimos 1 al valor, ya que sera la primera vez que se agrega.
-        else{
-            objetosDelCarrito[nameObject] =1;
-            // nombreRepetido = nameObject;
-            ul.classList.add("repetido");
-            ul.textContent=` ${nameObject}...... ${ objetosDelCarrito[nameObject]}`;
+            
+        })
 
-        }
-    })
-        lista.appendChild(ul);
+        li.appendChild(ul);     
+
+        
+        console.log(objetosDelCarrito);
+    
+
     }
 
+
+    
 })
 
 
